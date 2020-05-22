@@ -1,5 +1,5 @@
 # coding=utf-8
-# Copyright 2018 The Tensor2Tensor Authors.
+# Copyright 2020 The Tensor2Tensor Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,6 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 """Aggregate stats from produce_examples."""
 from __future__ import absolute_import
 from __future__ import division
@@ -22,9 +23,11 @@ import os
 
 import numpy as np
 
+import six
+from six.moves import zip
 from tensor2tensor.data_generators.wikisum import wikisum
 
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 flags = tf.flags
 FLAGS = flags.FLAGS
@@ -43,7 +46,7 @@ def aggregate_stats(stats_files):
   for fname in stats_files:
     with tf.gfile.Open(fname) as f:
       stats = json.loads(f.read())
-      for k, v in stats.iteritems():
+      for k, v in six.iteritems(stats):
         if k not in all_stats:
           if isinstance(v, list):
             all_stats[k] = []
